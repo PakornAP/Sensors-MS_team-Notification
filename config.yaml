@@ -1,0 +1,6 @@
+ALL_Mode: ['Mode_1','Mode_2']
+Webhooks_URL: 'https://scgo365.webhook.office.com/webhookb2/eb8cd8a6-966b-4661-8639-f3ddbc1bb694@5db8bf0e-8592-4ed0-82b2-a6d4d77933d4/IncomingWebhook/96a10837d4ff4c0d85ce0f72db5b23db/9dcffeb6-b731-4805-b82b-44e2b5b2d840'
+Input_Path: 'data/example_input.xlsx'
+Sensors_Data: 'data/MockUp_Data.csv'
+#Sensors_Data: 'data/data_mock.xlsx'
+DATE: '21-09-21 23:43'
