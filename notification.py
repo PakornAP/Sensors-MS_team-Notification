@@ -12,4 +12,9 @@ def send_text(line1,line2,line3,line4,mode):
     # send the message.
     myTeamsMessage.send()
 
-
+def wrong_input(text):
+    Webhooks_URL = get_value('Webhooks_URL')
+    myTeamsMessage = pymsteams.connectorcard(Webhooks_URL)
+    myTeamsMessage.title('Wrong input pattern')
+    myTeamsMessage.text(text)
+    myTeamsMessage.send()
