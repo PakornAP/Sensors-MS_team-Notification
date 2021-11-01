@@ -11,27 +11,25 @@ def sensors_history(sensors_table, sensors_name, threshold):  # select sensors_n
         return sensors_table[sensors_name]
     return sensor_table[sensors_name].tail(threshold)  # recent threshold row
 
-
+# Query by date
 def history_by_date(sensors_table, sensors_name, datetime, threshold=None):  # select sensors_name from sensors_table
-    if threshold == None:  # single low
-        table = sensors_table.loc[:datetime]  # query by datetime
-        table = table[sensors_name]
-        return table
-    if len(sensors_table) < threshold:
-        return sensors_table[sensors_name]
-    table = sensors_table.loc[:datetime].head(threshold)  # query by datetime
-    table = table[sensors_name]  # select by sensors_name
-    return table  # recent threshold row
+    table = sensors_table.loc[sensor_table["DATE"] == datetime]  # query by datetime
+    result = sensor_table.loc[:table.index[0]] # get index
+    result = result[sensors_name]
+    if len(result) < threshold:
+        return result
+    return result.tail(threshold)  # recent threshold row
 
 
 def query_events(events, sensors_table, mode):
     for index, row in events.iterrows():  # process each row of input
-        print(f'row : {index + 1}')
+        # print(f'row : {index + 1}')
         datetime = get_value('DATE')  # get test_datetime value from config.yaml
         # select sensorsname from sensors_table
-        # history = sensors_history(sensor_table, sensors_name=row['tag'], threshold=row['Threshold(min.)'])
+        # his_bydate = sensors_history(sensor_table, sensors_name=row['tag'], threshold=row['Threshold(min.)'])
         his_bydate = history_by_date(sensors_table, sensors_name=row.tag, threshold=row["Threshold(min.)"],
                                      datetime=datetime)  # sensors history
+        # print(f'hisbydate\n {his_bydate}')
         status = row['Status']  # method status
         # another sensor condition
         is_another_conditon = another_sensor(row, sensors_table, datetime)
@@ -48,10 +46,10 @@ def query_events(events, sensors_table, mode):
                 for val in his_bydate:  # process each sensors value in threshold
                     if mode == 'Mode_1':
                         temp.append(mode_1(val, row.High_limit))  # check with mode high condition
-                        line3 = 'Limit value : ' + str(row.High_limit)
+                        line3 = 'Limit value : ' + str(row['High_limit'])
                     elif mode == 'Mode_2':
                         temp.append(mode_2(val, row.Low_limit))  # check with mode low condition
-                        line3 = 'Limit value : ' + str(row.Low_limit)
+                        line3 = 'Limit value : ' + str(row['Low_limit'])
                     line4 = 'Sensors value: ' + str(val)
                 if threshold_check(temp):  # happens continue as threshold min.
                     # send_text(line1,line2,line3,line4,mode) # notification!!!!
@@ -63,12 +61,12 @@ def query_events(events, sensors_table, mode):
                     if mode_3(expo_moving(his_bydate),value):
                         line3 = 'Weight average value : ' + str(expo_moving(his_bydate))
                         print(f'Sent => {line1} \n {line2} \n {line3} \n {line4}')
-                        # send_text(line1,line2,line3,line4,mode) # notification!!!!
+                        send_text(line1,line2,line3,line4,mode) # notification!!!!
                 elif mode == 'Mode_4':
                     if mode_4(expo_moving(his_bydate), value):
                         line3 = 'Weight average value : ' + str(expo_moving(his_bydate))
                         print(f'Sent => {line1} \n {line2} \n {line3} \n {line4}')
-                        # send_text(line1,line2,line3,line4,mode) # notification!!!!
+                        send_text(line1,line2,line3,line4,mode) # notification!!!!
 
 # input_event => query_each_sheet => row of events =>
 # 1 check on-off and check compared sensors => another condition.pys
@@ -80,7 +78,7 @@ if __name__ == "__main__":
     input_path = get_value('Input_Path')
     sensordata = get_value('Sensors_Data')
     for mode in get_value("ALL_Mode"):  # each sheet
-        print(mode + " ++++++++++ ")
+        print(f'{mode} _______')
         # read input excel file
         events = pd.read_excel(input_path, sheet_name=mode)
         # read All sensors data

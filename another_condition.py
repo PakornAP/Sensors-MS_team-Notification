@@ -25,7 +25,8 @@ def not_equal(val, limit):  # invert of equal
 
 
 def get_sensor_val_by_name(datetime, sensors_table, sensor_name):
-    result = sensors_table.loc[sensors_table['DATE'] == datetime]
+    result = sensors_table.loc[sensors_table['DATE']==datetime]
+    # print(result)
     return result[sensor_name].iloc[0]  # sensorsvalue
 
 
