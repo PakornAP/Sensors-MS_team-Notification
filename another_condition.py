@@ -32,17 +32,16 @@ def get_sensor_val_by_name(datetime, sensors_table, sensor_name):
 
 def another_sensor(row, sensors_table,
                    datetime):  # if another condition => True mean pass to main sensor
-    if row['On/Off_sensor'] == 'not-use' or (
-            row.isnull().values.any() and type(row['On/Off_sensor']) != str):  # not use another sensors to compare
+    if row['On_sensor'] == 'not-use' or (
+            row.isnull().values.any() and type(row['On_sensor']) != str):  # not use another sensors to compare
         return True
     # compare
-    if (type(row['On/Off_condition']) == str):
+    if (type(row['On_condition']) == str):
         # define variable
-        compare_cond = row['On/Off_condition']
-        compare_name = row['On/Off_sensor']
-        compare_val = row['On/Off_value']  # from input
+        compare_cond = row['On_condition']
+        compare_name = row['On_sensor']
+        compare_val = row['On_value']  # from input
         compare_sensor_val = get_sensor_val_by_name(datetime, sensors_table, compare_name)  # from sensors api
-        # print(f'value : {compare_val} type : {type(compare_val)}')
         # condition
         if compare_cond == 'equal':
             return equal(compare_sensor_val, compare_val)

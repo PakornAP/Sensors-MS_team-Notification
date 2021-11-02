@@ -14,7 +14,7 @@ def sensors_history(sensors_table, sensors_name, threshold):  # select sensors_n
 # Query by date
 def history_by_date(sensors_table, sensors_name, datetime, threshold=None):  # select sensors_name from sensors_table
     table = sensors_table.loc[sensor_table["DATE"] == datetime]  # query by datetime
-    result = sensor_table.loc[:table.index[0]] # get index
+    result = sensor_table.loc[:table.index[0]-1] # get index
     result = result[sensors_name]
     if len(result) < threshold:
         return result
@@ -23,7 +23,6 @@ def history_by_date(sensors_table, sensors_name, datetime, threshold=None):  # s
 
 def query_events(events, sensors_table, mode):
     for index, row in events.iterrows():  # process each row of input
-        # print(f'row : {index + 1}')
         datetime = get_value('DATE')  # get test_datetime value from config.yaml
         # select sensorsname from sensors_table
         # his_bydate = sensors_history(sensor_table, sensors_name=row['tag'], threshold=row['Threshold(min.)'])
@@ -52,7 +51,7 @@ def query_events(events, sensors_table, mode):
                         line3 = 'Limit value : ' + str(row['Low_limit'])
                     line4 = 'Sensors value: ' + str(val)
                 if threshold_check(temp):  # happens continue as threshold min.
-                    # send_text(line1,line2,line3,line4,mode) # notification!!!!
+                    send_text(line1,line2,line3,line4,mode) # notification!!!!
                     print(f'Sent => {line1} \n {line2} \n {line3} \n {line4}')
             elif mode == 'Mode_3' or mode == 'Mode_4':
                 value = get_sensor_val_by_name(datetime,sensors_table,row.tag)
@@ -74,7 +73,6 @@ def query_events(events, sensors_table, mode):
 # 3 if yes => noti the message to chanels , no => pass
 
 if __name__ == "__main__":
-    sensors_name = 'H4-FIQ7865.PV'  # example sensors
     input_path = get_value('Input_Path')
     sensordata = get_value('Sensors_Data')
     for mode in get_value("ALL_Mode"):  # each sheet
