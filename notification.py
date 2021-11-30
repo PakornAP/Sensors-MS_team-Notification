@@ -1,6 +1,7 @@
 import pymsteams
 from get_value_yaml import get_value
 
+
 def send_text(line1,line2,line3,line4,mode):
     # You must create the connectorcard object with the Microsoft Webhook URL
     Webhooks_URL = get_value('Webhooks_URL')
