@@ -1,3 +1,5 @@
+from math import log10, floor
+
 def is_use(use):
     return True if use == 'on' else False
 
@@ -10,7 +12,7 @@ def mode_2(val,limit): # Low mode 2 => True below limit
 def expo_moving(table): #exponential weight moving (1-alpha)^t * xn / (1-alpha)^t
     res = table.ewm(com=0.5).mean()
     # print(f'resmean\n {res.mean()}')
-    return res.mean() # average value by weight
+    return round(res.mean(), 5-int(floor(log10(abs(res.mean()))))-1) # average value by weight
 
 def mode_3(weight,val): # Trend Up
     # print(f'weigth : {weight} , current val : {val}')

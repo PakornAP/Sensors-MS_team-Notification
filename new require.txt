@@ -1,0 +1,7 @@
+1. Value = Digit ตามเลขนัยสำคัญ  check++
+2.  One shot alarm check++
+	- ไม่ Alarm ซ้ำ condition เดิม ใน 1 h (is_sent) ++
+	- Create file logging for record alarm event (JSON) ++
+3. On/OFF condition
+	- Tag grade =  S/D,S/U  --> All alarm OFF   (Gift)
+	- 2 conditions specify by user   (and/or) CHECK++
