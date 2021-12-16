@@ -1,4 +1,3 @@
-from os import startfile, write
 import pandas as pd
 from condition import (
     mode_1,
@@ -21,9 +20,6 @@ def sensors_history(sensors_table, sensors_name, threshold):
     if len(sensors_table) < threshold:
         return sensors_table[sensors_name]
     return sensor_table[sensors_name].tail(threshold)  # recent threshold row
-
-
-# Query by date
 
 
 # select sensors_name from sensors_table
@@ -54,7 +50,7 @@ def query_events(events, sensors_table, mode):
             row, sensor_table, datetime, is_2=True
         )  # On_sensor2
         onsensors_gate = True
-        if row["On_gate"] == "AND" or row["On_gate"].empty == True:
+        if row["On_gate"] == "AND" or row["On_gate"] is nan:
             onsensors_gate = is_another_conditon and is_another_conditon2
         elif row["On_gate"] == "OR":
             onsensors_gate = is_another_conditon or is_another_conditon2
@@ -83,7 +79,7 @@ def query_events(events, sensors_table, mode):
                 if threshold_check(temp):  # happens continue as threshold min.
                     in_log, lasttime = has_log(row, mode)
                     if (
-                        in_log and is_sent(row, lasttime) is False
+                        in_log and is_sent(lasttime) is False
                     ):  # Guard Statement 1 hr ago
                         continue
                     if in_log and is_sent:
@@ -107,7 +103,7 @@ def query_events(events, sensors_table, mode):
                 if noti:
                     in_log, lasttime = has_log(row, mode)
                     if (
-                        in_log and is_sent(row, lasttime) is False
+                        in_log and is_sent(lasttime) is False
                     ):  # Guard Statement 1 hr ago
                         continue
                     if in_log and is_sent:
@@ -117,11 +113,11 @@ def query_events(events, sensors_table, mode):
                     print(f"Sent => {line1} \n {line2} \n {line3} \n {line4}")
                     send_text(line1, line2, line3, line4, mode)  # notification!!!!
 
-                    # input_event => query_each_sheet => row of events =>
-                    # 1 check on-off and check compared sensors => another condition.pys
-                    # 2 check main sensors value on condition with input value ( period = threshold )
-                    # 3 if yes => noti the message to chanels , no => pass
 
+# input_event => query_each_sheet => row of events =>
+# 1 check on-off and check compared sensors => another condition.pys
+# 2 check main sensors value on condition with input value ( period = threshold )
+# 3 if yes => noti the message to chanels , no => pass
 
 if __name__ == "__main__":
     input_path = get_value("Input_Path")

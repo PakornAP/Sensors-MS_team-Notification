@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 def read_log():
-    f = open("./data/testlog.json", "r")
+    f = open("./data/filelog.json", "r")
     # deserialize
     a = json.load(f)
     f.close()
@@ -13,7 +13,7 @@ def read_log():
 
 
 def write_log(data):
-    f = open("./data/testlog.json", "w")
+    f = open("./data/filelog.json", "w")
     # serialize
     json.dump(data, f)
     f.close()
@@ -52,7 +52,7 @@ def update_log(row, mode):  # update lasttime to file log
 
 
 # To check did massage has been sent in o'clock ago
-def is_sent(row, lasttime):  # True => sent it , False => do not sent it
+def is_sent(lasttime):  # True => sent it , False => do not sent it
     # time now transfromation
     time_now = datetime.now()
     time_now = time_now.strftime("%H:%M")
